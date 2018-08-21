@@ -103,10 +103,6 @@ $selectionColor: $color-primary-0;
   margin-left: 100px;
 }
 
-.slides .pdf-page :not(.title) :not(strong) {
-  margin-left: 100px;
-}
-
 // shadow for background images
 div.slide-background.present:not(.stack) {
   filter: drop-shadow(5px 5px 5px $color-primary-0);
