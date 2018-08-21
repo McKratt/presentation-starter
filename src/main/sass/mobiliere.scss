@@ -1,0 +1,231 @@
+// Default mixins and settings -----------------
+@import "../../../target/generated-slides/reveal.js-3.7.0/css/theme/template/mixins.scss";
+@import "../../../target/generated-slides/reveal.js-3.7.0/css/theme/template/settings.scss";
+
+$color-primary-0: #000; // Main Primary color */
+$color-primary-1: #da2323;
+$color-primary-2: #FF1A1A;
+$color-primary-3: #B80000;
+$color-primary-4: #820000;
+
+$color-secondary-0: #DA2323; // Main Secondary color */
+$color-secondary-1: #FF9696;
+$color-secondary-2: #EC5757;
+$color-secondary-3: #A90C0C;
+$color-secondary-4: #7A0000;
+
+$backgroundColor: #FFF;
+
+// Main text
+$mainFont: Arial, sans-serif;
+$mainFontSize: 32pt;
+$mainColor: $color-primary-0;
+
+// Code text
+$codeFont: Consolas, serif;
+$codeFontSize: 0.7 * $mainFontSize;
+$codeBackground: $backgroundColor;
+
+// Headings
+$headingFont: Georgia, serif;
+$headingTextShadow: 5px 5px 5px $color-primary-0;
+$headingColor: $color-primary-1;
+$headingTextTransform: none;
+
+$heading1Size: 2.8em;
+$heading2Size: 1.6em;
+$heading3Size: 1.2em;
+$heading4Size: 1.00em;
+
+// Links
+$linkColor: $color-secondary-0;
+$linkColorHover: lighten($linkColor, 20%);
+
+// Text selection
+$selectionBackgroundColor: $color-secondary-1;
+$selectionColor: $color-primary-0;
+
+// Theme template ------------------------------
+@import "../../../target/generated-slides/reveal.js-3.7.0/css/theme/template/theme";
+// ---------------------------------------------
+
+// some overrides after theme template import
+
+.reveal p {
+  font-weight: 300;
+  max-width: 1600px;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-weight: 100;
+  text-shadow: none;
+  font-size: 1.8 * $mainFontSize;
+  text-align: left;
+  margin-bottom: 50px;
+  margin-top: 40px;
+}
+
+.reveal p code {
+  background: $codeBackground none;
+  display: inline-block;
+  border-radius: 7px;
+  font-family: $codeFont;
+  font-size: $codeFontSize;
+}
+
+.reveal a {
+  font-size: 0.6 * $mainFontSize;
+}
+
+.reveal small code {
+  vertical-align: baseline;
+}
+
+.reveal section > div:first-child pre code {
+  height: 100%;
+  max-height: 900px;
+}
+
+.reveal pre code {
+  font-family: $codeFont;
+  font-size: $codeFontSize;
+  line-height: 1.3;
+  max-height: 650px;
+}
+
+.reveal .slides {
+  text-align: left;
+  margin-left: 100px;
+}
+
+// shadow for background images
+div.slide-background.present:not(.stack) {
+  filter: drop-shadow(5px 5px 5px $color-primary-0);
+}
+
+.reveal .attribution {
+  font-size: 50%;
+}
+
+section[data-background-size] h2 {
+  background: rgba($color-secondary-2, 0.5);
+  box-shadow: 0 0 5px rgba($color-primary-3, 0.5);
+  text-shadow: none;
+}
+
+section[data-background-size] img {
+  display: none;
+}
+
+section[data-background-size] {
+  top: initial !important;
+}
+
+.line-through {
+  text-decoration: line-through;
+}
+
+.reveal strong {
+  font-family: $mainFont;
+  font-size: 120%;
+}
+
+.footer {
+  position: absolute;
+  display: table;
+  width: 100%;
+  bottom: 0;
+  color: $color-primary-2;
+
+  & span {
+    display: table-cell;
+    padding: 0 15px 15px;
+    text-align: center;
+    font-family: "Arial", sans-serif;
+    font-size: 15pt;
+    font-weight: 500;
+
+    &:nth-of-type(1) {
+      text-align: left;
+    }
+
+    &:nth-last-child(1) {
+      text-align: right;
+      padding-right: 90px;
+    }
+  }
+  & img {
+    width: 150px;
+    padding-left: 10px;
+  }
+
+}
+
+section[data-background-size] .footer span {
+  display: none;
+}
+
+.reveal section.credits div {
+  font-size: 60%;
+  text-align: left;
+  padding-left: 1.5em;
+  text-indent: -1.5em;
+}
+
+.reveal section div.reference {
+  text-align: left;
+  margin-bottom: 10px;
+  font-size: 60%;
+}
+
+section[data-state='subtitle'] {
+  height: 100vh;
+  position: absolute;
+  padding: 0 !important;
+  display: flex !important;
+  margin-left: -100px;
+
+  & h2 {
+    margin: auto;
+  }
+}
+
+section.title {
+  top: -webkit-calc(100% - 250px) !important;
+  margin-left: -100px;
+
+  & h1 {
+    text-align: right;
+    margin-right: 100px;
+  }
+}
+
+div.title {
+  font-style: italic;
+  font-size: 0.8 * $mainFontSize;
+}
+
+.content {
+  width: 90%;
+}
+
+#note p em {
+  font-size: 0.5 * $mainFontSize;
+}
+
+.float-group .content {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: stretch;
+}
+
+.imageblock {
+  margin: auto;
+}

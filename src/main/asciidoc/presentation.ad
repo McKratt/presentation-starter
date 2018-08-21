@@ -1,0 +1,12 @@
+= Titre de la présentation
+:title-slide-background-image: titleBackgroundWithLogo.png
+:revealjs_customtheme: reveal.js/css/theme/mobiliere.css
+:highlightjs-theme: theme/dracula.css
+:icons: font
+:revealjs_center: false
+:talk-name: Tire de la présentation
+:talk-date: Date de la présentation
+:linkattrs:
+:imagesdir: images
+
+include::footer.ad[]

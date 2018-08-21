@@ -1,0 +1,28 @@
+[subs="attributes"]
+++++
+<script type="text/javascript">
+    window.addEventListener("load", function() {
+    	Reveal.configure({
+          keyboard: {
+             39: 'next', // Right Arrow
+             37: 'prev'  // Left Arrow
+          }
+        });
+    } );
+</script>
+
+<script type="text/javascript">
+    window.addEventListener("load", function() {
+
+        revealDiv = document.querySelector("body div.reveal")
+        footer = document.getElementById("mobiliere-footer");
+        revealDiv.appendChild(footer);
+
+    } );
+</script>
+<div id="mobiliere-footer" class="footer">
+    <span class="element logo"><img src=images/logoMobi.png  /></span>
+    <span class="element">{talk-name}</span>
+    <span class="element">{talk-date}</span>
+</div>
+++++
