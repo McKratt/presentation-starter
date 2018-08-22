@@ -27,6 +27,18 @@ git push origin master
 
 * Ajoutez votre présentation dans [index.ad](src/main/asciidoc/index.ad)
 
+## Contruction de la présentation
+
+Il existe deux builds IntelliJ inclus dans ce repo pour *builder* la présentation.
+
+### build
+
+Construit toute la présentation dans le dossier [target/generated-slides](target/generated-slides). Vous pouvez alors tester votre présentation directement depuis ce dossier.
+
+### dist
+
+Une fois satisfait de la présentation, vous pouvez lancer la deuxième configuration pour *builder* les pages qui seront affichée dans Github (dossier [docs](docs))
+
 ## Publication de la présentation
 
 Avec la fonctionnalité des Github Pages, la présentation sera automatiquement publiée sur internet.
@@ -36,3 +48,5 @@ Simplement activer la fonctionnalité dans les settings du projet github :
 ![Enable Github Pages](images/enableGithubPage.png)
 
 Une fois que vous avez activer la fonctionnalité, le lien correspondant apparait juste au dessus et vous pouvez cliquer dessus pour voir votre présentation.
+
+
