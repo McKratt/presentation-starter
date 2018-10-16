@@ -8,7 +8,7 @@ Il suffit de *forker* ce reporitory pour commencer une nouvelle présentation
 
 ### Forker le starter
 
-* Créez un nouveau repo sur Githu et clonez le :
+* Créez un nouveau repo sur Github et clonez le :
 ```
 git clone https://github.com/UserName/nouveau-repo.git
 ```
