@@ -154,6 +154,7 @@
                             <templateDir>
                                 ${project.static.dependency}/asciidoctor-reveal.js-${asciidoctor-revealjs.version}/templates
                             </templateDir>
+                            <backend>revealjs</backend>
                             <sourceHighlighter>highlightjs</sourceHighlighter>
                             <attributes>
                                 <src-incl>${project.basedir}/</src-incl>

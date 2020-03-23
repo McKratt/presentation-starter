@@ -21,7 +21,7 @@
     } );
 </script>
 <div id="mobiliere-footer" class="footer">
-    <span class="element logo"><img src=images/logoMobi.png  /></span>
+    <span class="element logo"><img src="images/logoMobi.png"  /></span>
     <span class="element">{talk-name}</span>
     <span class="element">{talk-date}</span>
 </div>
