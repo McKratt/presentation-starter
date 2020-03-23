@@ -1,6 +1,6 @@
 // Default mixins and settings -----------------
-@import "../../../target/generated-slides/reveal.js-3.9.2/css/theme/template/mixins.scss";
-@import "../../../target/generated-slides/reveal.js-3.9.2/css/theme/template/settings.scss";
+@import "../../../target/generated-slides/reveal.js-3.8.0/css/theme/template/mixins.scss";
+@import "../../../target/generated-slides/reveal.js-3.8.0/css/theme/template/settings.scss";
 
 $color-primary-0: #000; // Main Primary color */
 $color-primary-1: #da2323;
@@ -46,7 +46,7 @@ $selectionBackgroundColor: $color-secondary-1;
 $selectionColor: $color-primary-0;
 
 // Theme template ------------------------------
-@import "../../../target/generated-slides/reveal.js-3.9.2/css/theme/template/theme";
+@import "../../../target/generated-slides/reveal.js-3.8.0/css/theme/template/theme";
 // ---------------------------------------------
 
 // some overrides after theme template import

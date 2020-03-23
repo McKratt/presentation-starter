@@ -9,25 +9,89 @@
     <version>1.1.0-SNAPSHOT</version>
 
     <properties>
-        <project.slides.directory>${project.build.directory}/generated-slides</project.slides.directory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.resources.plugin.version>3.1.0</maven.resources.plugin.version>
+        <project.slides.directory>${project.build.directory}/generated-slides</project.slides.directory>
         <project.static.dependency>dependencies</project.static.dependency>
         <project.dist.directory>docs</project.dist.directory>
         <asciidoctor.maven.plugin.version>2.0.0-RC.1</asciidoctor.maven.plugin.version>
         <sass.maven.plugin.version>3.7.2</sass.maven.plugin.version>
-        <!-- switching to 1.5.6 breaks background images -->
         <asciidoctorj.version>2.2.0</asciidoctorj.version>
         <jruby.version>9.2.11.0</jruby.version>
-        <revealjs.version>3.9.2</revealjs.version>
-        <!-- Use 'master' as version and remove the 'v' prefixing the download url to use the current snapshot version  -->
-        <!-- switching to 1.1.x breaks conversion -->
-        <asciidoctor-revealjs.version>4.0.1</asciidoctor-revealjs.version>
+        <revealjs.version>3.8.0</revealjs.version>
+        <gems.path>${project.build.directory}/gems</gems.path>
+        <asciidoctor-revealjs.version>3.1.0</asciidoctor-revealjs.version>
         <theme.dir>${project.slides.directory}/theme</theme.dir>
     </properties>
-
     <build>
         <defaultGoal>process-resources</defaultGoal>
+        <extensions>
+            <extension> <!-- this allows us to download gems -->
+                <groupId>org.torquebox.mojo</groupId>
+                <artifactId>mavengem-wagon</artifactId>
+                <version>1.0.3</version>
+            </extension>
+        </extensions>
         <plugins>
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.4.2</version>
+                <executions>
+                    <execution>
+                        <id>install-revealjs</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>https://github.com/hakimel/reveal.js/archive/${revealjs.version}.zip</url>
+                            <unpack>true</unpack>
+                            <outputFileName>reveal.js-${revealjs.version}.zip</outputFileName>
+                            <outputDirectory>${project.slides.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>de.saumya.mojo</groupId>
+                <artifactId>gem-maven-plugin</artifactId>
+                <version>1.1.8</version>
+                <configuration>
+                    <jrubyVersion>${jruby.version}</jrubyVersion>
+                    <gemHome>${project.build.directory}/gems</gemHome>
+                    <gemPath>${project.build.directory}/gems</gemPath>
+                </configuration>
+                <executions>
+                    <!-- Install required gems in target directory -->
+                    <execution>
+                        <id>install-gems</id>
+                        <goals>
+                            <goal>initialize</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                </executions>
+            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>nl.geodienstencentrum.maven</groupId>-->
+<!--                <artifactId>sass-maven-plugin</artifactId>-->
+<!--                <version>${sass.maven.plugin.version}</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>update-template-stylesheets</id>-->
+<!--                        <phase>process-resources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>update-stylesheets</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <destination>${theme.dir}</destination>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
@@ -47,7 +111,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <sourceDirectory>src/main/asciidoc</sourceDirectory>
+                    <sourceDirectory>src/docs/asciidoc</sourceDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -57,22 +121,22 @@
                             <goal>process-asciidoc</goal>
                         </goals>
                         <configuration>
+                            <!-- include the asciidoctor-revealjs gem -->
+                            <gemPath>${project.build.directory}/gems</gemPath>
+                            <requires>
+                                <require>asciidoctor-revealjs</require>
+                            </requires>
                             <outputDirectory>${project.slides.directory}</outputDirectory>
-                            <backend>revealjs</backend>
                             <templateDir>
                                 ${project.static.dependency}/asciidoctor-reveal.js-${asciidoctor-revealjs.version}/templates
                             </templateDir>
                             <sourceHighlighter>highlightjs</sourceHighlighter>
                             <attributes>
-                                <!--
-                                    As we are downloading reveal.js in runtime, it sits in a nonstandard folder `reveal.js-${revealjs.version}`
-                                -->
-                                <revealjsdir>reveal.js-${revealjs.version}</revealjsdir>
                                 <src-incl>${project.basedir}/</src-incl>
-                                <!-- put here the reveal.js specific attributes -->
+                                <project-version>${project.version}</project-version>
+                                <revealjsdir>reveal.js-${revealjs.version}</revealjsdir>
                                 <revealjs_customtheme>theme/mobiliere.css</revealjs_customtheme>
                                 <revealjs_transition>linear</revealjs_transition>
-                                <project-version>${project.version}</project-version>
                                 <revealjs_history>true</revealjs_history>
                                 <revealjs_width>1920</revealjs_width>
                                 <revealjs_height>1080</revealjs_height>
@@ -82,100 +146,168 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>nl.geodienstencentrum.maven</groupId>
-                <artifactId>sass-maven-plugin</artifactId>
-                <version>${sass.maven.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>update-template-stylesheets</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>update-stylesheets</goal>
-                        </goals>
-                        <configuration>
-                            <destination>${theme.dir}</destination>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
-
-                <executions>
-                    <!--Remove this execution if not behind proxy-->
-                    <execution>
-                        <id>copy asciidoc reveal plugin</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/asciidoctor-reveal.js-${asciidoctor-revealjs.version}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.static.dependency}/asciidoctor-reveal.js-${asciidoctor-revealjs.version}</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <!--Remove this execution if not behind proxy-->
-                    <execution>
-                        <id>copy reveal</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.slides.directory}/reveal.js-${revealjs.version}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.dist.directory}/reveal.js-${revealjs.version}</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-stylesheet-resources</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${theme.dir}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/sass/</directory>
-                                    <filtering>false</filtering>
-                                    <excludes>
-                                        <exclude>*.scss</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-to-final</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.dist.directory}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.slides.directory}</directory>
-                                    <filtering>false</filtering>
-                                    <excludes>
-                                        <exclude>reveal.js-${asciidoctor-revealjs.version}</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>mavengems</id>
+            <url>mavengem:http://rubygems.org</url>
+        </repository>
+    </repositories>
+    <!--    <build>-->
+    <!--        <defaultGoal>process-resources</defaultGoal>-->
+    <!--        <plugins>-->
+    <!--            <plugin>-->
+    <!--                <groupId>org.asciidoctor</groupId>-->
+    <!--                <artifactId>asciidoctor-maven-plugin</artifactId>-->
+    <!--                <version>${asciidoctor.maven.plugin.version}</version>-->
+    <!--                <dependencies>-->
+    <!--                    &lt;!&ndash; Comment this section to use the default jruby artifact provided by the plugin &ndash;&gt;-->
+    <!--                    &lt;!&ndash;                    <dependency>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                        <groupId>org.jruby</groupId>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                        <artifactId>jruby-complete</artifactId>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                        <version>${jruby.version}</version>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                    </dependency>&ndash;&gt;-->
+    <!--                    &lt;!&ndash; Comment this section to use the default AsciidoctorJ artifact provided by the plugin &ndash;&gt;-->
+    <!--                    &lt;!&ndash;                    <dependency>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                        <groupId>org.asciidoctor</groupId>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                        <artifactId>asciidoctorj</artifactId>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                        <version>${asciidoctorj.version}</version>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                    </dependency>&ndash;&gt;-->
+    <!--                </dependencies>-->
+    <!--                <configuration>-->
+    <!--                    <sourceDirectory>src/main/asciidoc</sourceDirectory>-->
+    <!--                    <gemPath>${gems.path}</gemPath>-->
+    <!--                    <requires>-->
+    <!--                        <require>asciidoctor-revealjs</require>-->
+    <!--                    </requires>-->
+    <!--                </configuration>-->
+    <!--                <executions>-->
+    <!--                    <execution>-->
+    <!--                        <id>generate-slides</id>-->
+    <!--                        <phase>process-resources</phase>-->
+    <!--                        <goals>-->
+    <!--                            <goal>process-asciidoc</goal>-->
+    <!--                        </goals>-->
+    <!--                        <configuration>-->
+    <!--                            <outputDirectory>${project.slides.directory}</outputDirectory>-->
+    <!--                            <backend>revealsjs</backend>-->
+    <!--                            <templateDir>-->
+    <!--                                ${project.static.dependency}/asciidoctor-reveal.js-${asciidoctor-revealjs.version}/templates-->
+    <!--                            </templateDir>-->
+    <!--                            <sourceHighlighter>highlightjs</sourceHighlighter>-->
+    <!--                            <attributes>-->
+    <!--                                <src-incl>${project.basedir}/</src-incl>-->
+    <!--                                <project-version>${project.version}</project-version>-->
+    <!--                                <revealjsdir>reveal.js-${revealjs.version}</revealjsdir>-->
+    <!--                                <revealjs_customtheme>theme/mobiliere.css</revealjs_customtheme>-->
+    <!--                                <revealjs_transition>linear</revealjs_transition>-->
+    <!--                                <revealjs_history>true</revealjs_history>-->
+    <!--                                <revealjs_width>1920</revealjs_width>-->
+    <!--                                <revealjs_height>1080</revealjs_height>-->
+    <!--                                <revealjs_margin>0</revealjs_margin>-->
+    <!--                            </attributes>-->
+    <!--                        </configuration>-->
+    <!--                    </execution>-->
+    <!--                </executions>-->
+    <!--            </plugin>-->
+    <!--            <plugin>-->
+    <!--                <groupId>nl.geodienstencentrum.maven</groupId>-->
+    <!--                <artifactId>sass-maven-plugin</artifactId>-->
+    <!--                <version>${sass.maven.plugin.version}</version>-->
+    <!--                <executions>-->
+    <!--                    <execution>-->
+    <!--                        <id>update-template-stylesheets</id>-->
+    <!--                        <phase>process-resources</phase>-->
+    <!--                        <goals>-->
+    <!--                            <goal>update-stylesheets</goal>-->
+    <!--                        </goals>-->
+    <!--                        <configuration>-->
+    <!--                            <destination>${theme.dir}</destination>-->
+    <!--                        </configuration>-->
+    <!--                    </execution>-->
+    <!--                </executions>-->
+    <!--            </plugin>-->
+    <!--            <plugin>-->
+    <!--                <artifactId>maven-resources-plugin</artifactId>-->
+    <!--                <version>${maven.resources.plugin.version}</version>-->
+    <!--                <executions>-->
+    <!--                    &lt;!&ndash;                    &lt;!&ndash;Remove this execution if not behind proxy&ndash;&gt;&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                    <execution>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                        <id>copy asciidoc reveal plugin</id>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                        <phase>generate-resources</phase>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                        <goals>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                            <goal>copy-resources</goal>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                        </goals>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                        <configuration>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                            <outputDirectory>${gems.path}</outputDirectory>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                            <resources>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                                <resource>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                                    <directory>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                                        ${project.static.dependency}/asciidoctor-reveal.js-${asciidoctor-revealjs.version}&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                                    </directory>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                                    <include></include>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                                </resource>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                            </resources>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                        </configuration>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                    </execution>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;Remove this execution if not behind proxy&ndash;&gt;-->
+    <!--                    <execution>-->
+    <!--                        <id>copy reveal</id>-->
+    <!--                        <phase>generate-resources</phase>-->
+    <!--                        <goals>-->
+    <!--                            <goal>copy-resources</goal>-->
+    <!--                        </goals>-->
+    <!--                        <configuration>-->
+    <!--                            <outputDirectory>${project.slides.directory}/reveal.js-${revealjs.version}</outputDirectory>-->
+    <!--                            <resources>-->
+    <!--                                <resource>-->
+    <!--                                    <directory>${project.dist.directory}/reveal.js-${revealjs.version}</directory>-->
+    <!--                                </resource>-->
+    <!--                            </resources>-->
+    <!--                        </configuration>-->
+    <!--                    </execution>-->
+    <!--                    <execution>-->
+    <!--                        <id>copy-stylesheet-resources</id>-->
+    <!--                        <phase>process-resources</phase>-->
+    <!--                        <goals>-->
+    <!--                            <goal>copy-resources</goal>-->
+    <!--                        </goals>-->
+    <!--                        <configuration>-->
+    <!--                            <outputDirectory>${theme.dir}</outputDirectory>-->
+    <!--                            <resources>-->
+    <!--                                <resource>-->
+    <!--                                    <directory>src/main/sass/</directory>-->
+    <!--                                    <filtering>false</filtering>-->
+    <!--                                    <excludes>-->
+    <!--                                        <exclude>*.scss</exclude>-->
+    <!--                                    </excludes>-->
+    <!--                                </resource>-->
+    <!--                            </resources>-->
+    <!--                        </configuration>-->
+    <!--                    </execution>-->
+    <!--                    <execution>-->
+    <!--                        <id>copy-to-final</id>-->
+    <!--                        <phase>package</phase>-->
+    <!--                        <goals>-->
+    <!--                            <goal>copy-resources</goal>-->
+    <!--                        </goals>-->
+    <!--                        <configuration>-->
+    <!--                            <outputDirectory>${project.dist.directory}</outputDirectory>-->
+    <!--                            <resources>-->
+    <!--                                <resource>-->
+    <!--                                    <directory>${project.slides.directory}</directory>-->
+    <!--                                    <filtering>false</filtering>-->
+    <!--                                    <excludes>-->
+    <!--                                        <exclude>reveal.js-${asciidoctor-revealjs.version}</exclude>-->
+    <!--                                    </excludes>-->
+    <!--                                </resource>-->
+    <!--                            </resources>-->
+    <!--                        </configuration>-->
+    <!--                    </execution>-->
+    <!--                </executions>-->
+    <!--            </plugin>-->
+    <!--        </plugins>-->
+    <!--    </build>-->
 </project>
