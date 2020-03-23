@@ -2,6 +2,8 @@
 
 Ce projet permet de créer facilement des présentations correspondantes au style de la Mobilière basée sur Asciidoc et Reveal.js.
 
+Basé sur [doc officielle](https://github.com/asciidoctor/asciidoctor-maven-examples/blob/master/asciidoc-to-revealjs-example/pom.xml)
+
 ## Création de la présentation
 
 Il suffit de *forker* ce reporitory pour commencer une nouvelle présentation
@@ -27,17 +29,7 @@ git push origin master
 
 * Ajoutez votre présentation dans [index.ad](src/main/asciidoc/index.ad)
 
-## Contruction de la présentation
-
-Il existe deux builds IntelliJ inclus dans ce repo pour *builder* la présentation.
-
-### build
-
-Construit toute la présentation dans le dossier [target/generated-slides](target/generated-slides). Vous pouvez alors tester votre présentation directement depuis ce dossier.
-
-### dist
-
-Une fois satisfait de la présentation, vous pouvez lancer la deuxième configuration pour *builder* les pages qui seront affichée dans Github (dossier [docs](docs))
+* Générez la présentation avec lançant la commande `mvn`. La présentation est créée dans le répertoire `target/generated-slides`
 
 ## Publication de la présentation
 
