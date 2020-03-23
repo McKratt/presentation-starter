@@ -13,14 +13,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.static.dependency>dependencies</project.static.dependency>
         <project.dist.directory>docs</project.dist.directory>
-        <asciidoctor.maven.plugin.version>1.5.6</asciidoctor.maven.plugin.version>
+        <asciidoctor.maven.plugin.version>2.0.0-RC.1</asciidoctor.maven.plugin.version>
+        <sass.maven.plugin.version>3.7.2</sass.maven.plugin.version>
         <!-- switching to 1.5.6 breaks background images -->
-        <asciidoctorj.version>1.5.5</asciidoctorj.version>
-        <jruby.version>1.7.26</jruby.version>
-        <revealjs.version>3.7.0</revealjs.version>
+        <asciidoctorj.version>2.2.0</asciidoctorj.version>
+        <jruby.version>9.2.11.0</jruby.version>
+        <revealjs.version>3.9.2</revealjs.version>
         <!-- Use 'master' as version and remove the 'v' prefixing the download url to use the current snapshot version  -->
         <!-- switching to 1.1.x breaks conversion -->
-        <asciidoctor-revealjs.version>1.1.3</asciidoctor-revealjs.version>
+        <asciidoctor-revealjs.version>4.0.1</asciidoctor-revealjs.version>
         <theme.dir>${project.slides.directory}/theme</theme.dir>
     </properties>
 
@@ -84,7 +85,7 @@
             <plugin>
                 <groupId>nl.geodienstencentrum.maven</groupId>
                 <artifactId>sass-maven-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>${sass.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>update-template-stylesheets</id>
@@ -111,10 +112,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/asciidoctor-reveal.js-1.1.3</outputDirectory>
+                            <outputDirectory>${project.build.directory}/asciidoctor-reveal.js-${asciidoctor-revealjs.version}</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.static.dependency}/asciidoctor-reveal.js-1.1.3</directory>
+                                    <directory>${project.static.dependency}/asciidoctor-reveal.js-${asciidoctor-revealjs.version}</directory>
                                 </resource>
                             </resources>
                         </configuration>
@@ -127,10 +128,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.slides.directory}/reveal.js-3.7.0</outputDirectory>
+                            <outputDirectory>${project.slides.directory}/reveal.js-${revealjs.version}</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.dist.directory}/reveal.js-3.7.0</directory>
+                                    <directory>${project.dist.directory}/reveal.js-${revealjs.version}</directory>
                                 </resource>
                             </resources>
                         </configuration>
