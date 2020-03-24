@@ -14,7 +14,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.resources.plugin.version>3.1.0</maven.resources.plugin.version>
         <mavengem-wagon.plugin.version>1.0.3</mavengem-wagon.plugin.version>
-        <download.plugin.version>1.4.2</download.plugin.version>
+        <!-- 1.4.2 has a bug with proxies https://github.com/maven-download-plugin/maven-download-plugin/pull/30 -->
+        <download.plugin.version>1.4.1</download.plugin.version>
         <gem.plugin.version>1.1.8</gem.plugin.version>
         <project.slides.directory>${project.build.directory}/generated-slides</project.slides.directory>
         <project.static.dependency>dependencies</project.static.dependency>
