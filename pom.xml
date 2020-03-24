@@ -13,6 +13,9 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.resources.plugin.version>3.1.0</maven.resources.plugin.version>
+        <mavengem-wagon.plugin.version>1.0.3</mavengem-wagon.plugin.version>
+        <download.plugin.version>1.4.2</download.plugin.version>
+        <gem.plugin.version>1.1.8</gem.plugin.version>
         <project.slides.directory>${project.build.directory}/generated-slides</project.slides.directory>
         <project.static.dependency>dependencies</project.static.dependency>
         <project.dist.directory>docs</project.dist.directory>
@@ -22,14 +25,14 @@
         <jruby.version>9.2.9.0</jruby.version>
         <revealjs.version>3.8.0</revealjs.version>
         <gems.path>${project.build.directory}/gems</gems.path>
-        <asciidoctor-revealjs.version>master</asciidoctor-revealjs.version>
+        <asciidoctor-revealjs.version>3.0.0</asciidoctor-revealjs.version>
         <theme.dir>${project.slides.directory}/theme</theme.dir>
     </properties>
     <dependencies>
         <dependency>
             <groupId>rubygems</groupId>
             <artifactId>asciidoctor-revealjs</artifactId>
-            <version>3.0.0</version>
+            <version>${asciidoctor-revealjs.version}</version>
             <type>gem</type>
             <!-- Avoid downloading gems included in AsciidoctorJ -->
             <exclusions>
@@ -54,14 +57,14 @@
             <extension> <!-- this allows us to download gems -->
                 <groupId>org.torquebox.mojo</groupId>
                 <artifactId>mavengem-wagon</artifactId>
-                <version>1.0.3</version>
+                <version>${mavengem-wagon.plugin.version}</version>
             </extension>
         </extensions>
         <plugins>
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
-                <version>1.4.2</version>
+                <version>${download.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>install-revealjs</id>
@@ -81,7 +84,7 @@
             <plugin>
                 <groupId>de.saumya.mojo</groupId>
                 <artifactId>gem-maven-plugin</artifactId>
-                <version>1.1.8</version>
+                <version>${gem.plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <jrubyVersion>${jruby.version}</jrubyVersion>
