@@ -39,6 +39,16 @@ Simplement activer la fonctionnalité dans les settings du projet github :
 
 ![Enable Github Pages](images/enableGithubPage.png)
 
+Et copier votre présentation dans le bon répertoire
+
 Une fois que vous avez activer la fonctionnalité, le lien correspondant apparait juste au dessus et vous pouvez cliquer dessus pour voir votre présentation.
 
-
+## Derrière un proxy
+Pour télécharger `revealjs` il vous faut pouvoir aller sur github en https. Si vous êtes derrière un proxy ajoutez ce variables à la commande `mvn` :
+```shell script
+-Dhttps.proxyHost=<url_de_votre_proxy>
+-Dhttps.proxyPort=<port_de_votre_proxy>
+-Dhttps.proxyUser=<user>
+-Dhttps.proxyPassword=<mot_de_passe>
+```
+ __Note:__ le user et mot de passe sont optionnels, cela dépend des exigences de votre proxy.
