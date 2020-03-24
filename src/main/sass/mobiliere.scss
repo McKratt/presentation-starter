@@ -78,6 +78,10 @@ $selectionColor: $color-primary-0;
   font-size: $codeFontSize;
 }
 
+.reveal section {
+  height: 100%;
+}
+
 .reveal a {
   font-size: 0.6 * $mainFontSize;
 }
@@ -141,6 +145,7 @@ section[data-background-size] {
   width: 100%;
   bottom: 0;
   color: $color-primary-2;
+  z-index: 1;
 
   & span {
     display: table-cell;
@@ -192,13 +197,18 @@ section[data-state='subtitle'] {
 
   & h2 {
     margin: auto;
+    font-size: 2 * $heading2Size;
+    text-align: center;
   }
 }
 
 section.title {
   top: -webkit-calc(100% - 250px) !important;
-  margin-left: -100px;
-
+  background-color: white;
+  z-index: 0;
+  right: 50px;
+  padding-left: 20px !important;
+  width: fit-content !important;
   & h1 {
     text-align: right;
     margin-right: 100px;
@@ -218,6 +228,11 @@ div.title {
   font-size: 0.5 * $mainFontSize;
 }
 
+div.note {
+  position: absolute;
+  bottom: 50px;
+}
+
 .float-group .content {
   display: inline-flex;
   flex-direction: row;
@@ -228,4 +243,12 @@ div.title {
 
 .imageblock {
   margin: auto;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+a.inline {
+  font-size: $mainFontSize;
 }
