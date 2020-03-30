@@ -24,7 +24,7 @@
         <sass.maven.plugin.version>3.7.2</sass.maven.plugin.version>
         <asciidoctorj.version>2.2.0</asciidoctorj.version>
         <jruby.version>9.2.9.0</jruby.version>
-        <revealjs.version>3.8.0</revealjs.version>
+        <revealjs.version>3.9.2</revealjs.version>
         <gems.path>${project.build.directory}/gems</gems.path>
         <asciidoctor-revealjs.version>3.0.0</asciidoctor-revealjs.version>
         <theme.dir>${project.slides.directory}/theme</theme.dir>
